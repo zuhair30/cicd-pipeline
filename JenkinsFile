@@ -1,0 +1,35 @@
+node{
+	stage('git checkout'){
+		// code for checkout
+		git credentialsId: '543848ce-c858-4cac-88c8-729f1ba0020b', url: 'https://github.com/zuhair30/cicd-pipeline.git'
+	}
+	
+	stage('mvn build and test'){
+		// code for build
+    //	maven : 'maven 3.3.9' not needed mvn is local on cloud build server
+		sh "mvn clean package"
+	
+	}
+
+	stage('docker build image'){
+		// code for docker image build
+		sh 'docker build -t zuhair30/cicd-pipeline:1.0 .'
+		
+	}
+	
+	stage('docker push code to hub'){
+		// code for docker push
+            withCredentials([usernamePassword(credentialsId: 'dockerHubCred', passwordVariable: 'dockerpass', usernameVariable: 'dockeruser')]) {
+            
+            sh 'echo $dockeruser && docker login -u $dockeruser -p $dockerpass'
+            sh 'docker push zuhair30/cicd-pipeline:1.0'
+       }
+      
+ 
+	}
+	stage ('docker image deployed to pcf'){
+    // code for cloud deployment
+    pushToCloudFoundry cloudSpace: 'cicd-pipeline', credentialsId: 'PCFCredentials', organization: 'Bootcamp05', target: 'https://api.run.pivotal.io/'
+    } 
+	
+}

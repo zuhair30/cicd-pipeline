@@ -1,0 +1,7 @@
+---
+applications:
+- name: cicd-pipeline
+  memory: 512M
+  instances: 1
+  path: target/devops-test-app-0.0.1-SNAPSHOT.jar
+  buildpack: https://github.com/cloudfoundry/java-buildpack
