@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  some-mysql:
+    image: zuhair30/mysqlimg:2.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=MyAppDb
+      - MYSQL_USER=myapp-user
+      - MYSQL_PASSWORD=test123
+    ports:
+      - 3306:3306
+
+  objective-carson:
+    image: zuhair30/spring-boot:1.0
+    restart: on-failure
+    depends_on:
+      - some-mysql
+    ports:
+      - 8080:8080
+    environment:
+      - DATABASE_HOST=myapp-mysql
+      - DATABASE_USER=myapp-user
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=MyAppDb
+      - DATABASE_PORT=3306
