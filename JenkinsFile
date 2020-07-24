@@ -29,7 +29,17 @@ node{
 	}
 	stage ('docker image deployed to pcf'){
     // code for cloud deployment
-    pushToCloudFoundry cloudSpace: 'cicd-pipeline', credentialsId: 'PCFCredentials', organization: 'Bootcamp05', target: 'https://api.run.pivotal.io/'
-    } 
+   // pushToCloudFoundry cloudSpace: 'cicd-pipeline', credentialsId: 'PCFCredentials', organization: 'Bootcamp05', target: 'https://api.run.pivotal.io/'
+  // pushToCloudFoundry cloudSpace: 'cicd-pipeline', credentialsId: 'PCFCredentials', manifestChoice: [appName: 'cicd-pipeline', appPath: '', buildpack: '', command: '', domain: '', hostname: 'cicd-pipeline', instances: '1', memory: '512', noRoute: 'false', stack: '', timeout: '60', value: 'jenkinsConfig'], organization: 'Bootcamp05', target: 'https://api.run.pivotal.io'
+    pushToCloudFoundry cloudSpace: 'cicd-pipeline', credentialsId: 'PCFCredentials', manifestChoice: [manifestFile: '/var/lib/jenkins/workspace/Bootcamp0501/Manifest.yml'], organization: 'Bootcamp05', pluginTimeout: '240', target: 'https://api.run.pivotal.io'
+
+/*withCredentials([usernamePassword(credentialsId: 'PCFCredentials', passwordVariable: 'pcfpwd', usernameVariable: 'pcfuser')]) {
+    // some block
+    
+    sh '/usr/local/bin/cf login -a https://api.run.pivotal.io -u $pcfuser -p $pcfpwd'
+    sh 'echo $pcfuser' 
+}*/
+	    
+	} 
 	
 }
